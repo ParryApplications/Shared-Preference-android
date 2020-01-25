@@ -1,0 +1,58 @@
+package com.example.paras.udemy;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.SharedPreferences;
+import android.media.MediaPlayer;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.SeekBar;
+import android.widget.TableLayout;
+import android.widget.TextView;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+public class MainActivity extends AppCompatActivity{
+
+    private Button savebuttonID;
+    private TextView textID;
+    private int count=0;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        textID = (TextView)findViewById(R.id.textID);
+        savebuttonID = (Button)findViewById(R.id.savebuttonID);
+        load();
+        savebuttonID.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                count++;
+                textID.setText(String.valueOf(count));
+            }
+        });
+
+    }
+    public void save()
+    {
+        SharedPreferences sharedPreferences = getSharedPreferences("save content",0);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt("ishu",count);
+        editor.apply();
+    }
+    public void load()
+    {
+        SharedPreferences sharedPreferences = getSharedPreferences("save content",0);
+        count = sharedPreferences.getInt("ishu",0);
+        textID.setText(String.valueOf(count));
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        save();
+    }
+}
